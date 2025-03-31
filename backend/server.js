@@ -2,6 +2,7 @@ const express = require("express");
 const userRouter = require("./routes/userRouter");
 const app = express();
 const mongoose = require("mongoose");
+const errorHandler = require("./middlewares/errorHandlerMiddleware");
 require("dotenv").config();
 
 //!Connect to mongoDB
@@ -15,6 +16,7 @@ app.use(express.json()); //? Parse incoming Json data
 
 //!Route
 app.use("/", userRouter);
+app.use(errorHandler);
 
 //!Start the server
 const PORT = process.env.PORT || 8002;
