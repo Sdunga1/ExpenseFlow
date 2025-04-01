@@ -1,5 +1,6 @@
 const express = require("express");
 const userRouter = require("./routes/userRouter");
+const categoryRouter = require("./routes/categoryRouter");
 const app = express();
 const mongoose = require("mongoose");
 const errorHandler = require("./middlewares/errorHandlerMiddleware");
@@ -16,6 +17,7 @@ app.use(express.json()); //? Parse incoming Json data
 
 //!Route
 app.use("/", userRouter);
+app.use("/", categoryRouter);
 app.use(errorHandler);
 
 //!Start the server
