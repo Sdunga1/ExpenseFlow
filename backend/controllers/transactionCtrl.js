@@ -71,10 +71,31 @@ const transactionController = {
   }),
 
   //! Update
-  update: asyncHandler(async (req, res) => {}),
+  update: asyncHandler(async (req, res) => {
+    //! Find the transaction by ID
+    const transaction = await Transaction.findById(req.params.id);
+    if (transaction && transaction.user.toString() === req.user.toString()) {
+      transaction.type = req.body.type || transaction.type;
+      transaction.category = req.body.category || transaction.category;
+      transaction.amount = req.body.amount || transaction.amount;
+      transaction.date = req.body.date || transaction.date;
+      transaction.description = req.body.description || transaction.description;
+    }
+
+    //! Update the transaction
+    const updatedTransaction = await transaction.save();
+    res.json(updatedTransaction);
+  }),
 
   //! Delete
-  delete: asyncHandler(async (req, res) => {}),
+  delete: asyncHandler(async (req, res) => {
+    //! Find the transaction by ID
+    const transaction = await Transaction.findById(req.params.id);
+    if (transaction && transaction.user.toString() === req.user.toString()) {
+      await Transaction.findByIdAndDelete(req.params.id);
+      res.json({ message: "Transaction deleted successfully" });
+    }
+  }),
 };
 
 module.exports = transactionController;
