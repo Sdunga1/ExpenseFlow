@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 const userRouter = require("./routes/userRouter");
 const categoryRouter = require("./routes/categoryRouter");
 const transactionRouter = require("./routes/transactionRouter");
@@ -15,6 +16,7 @@ mongoose
 
 //!Middlewares
 app.use(express.json()); //? Parse incoming Json data
+app.use(cors());
 
 //!Route
 app.use("/", userRouter);
