@@ -49,7 +49,7 @@ const LoginForm = () => {
           //dispatch
           dispatch(loginAction(data));
           //Save the user into localstorage
-          localStorage.setItem('userInfo', JSON.stringify(data));
+          localStorage.setItem("userInfo", JSON.stringify(data));
         })
         .catch((e) => console.log(e));
     },
@@ -129,13 +129,6 @@ const LoginForm = () => {
       </button>
 
       <div className="flex justify-center">
-        <Link
-          to="/"
-          className="text-center hover:text-green-500 text-red-800 font-sm mr-1.5"
-        >
-          Home
-        </Link>
-        <p className="text-gray-600">/</p>
         <Link
           to="/register"
           className="text-center hover:text-green-500 text-red-800 font-sm ml-1.5"
