@@ -55,7 +55,7 @@ const RegisterForm = () => {
       if (isSuccess) {
         navigate("/login");
       }
-    }, 3000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, [isSuccess, navigate]);

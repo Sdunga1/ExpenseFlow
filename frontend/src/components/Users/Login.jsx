@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import robotGif from "../../assets/robot.gif";
 import { useFormik } from "formik";
@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { loginAPI } from "../../services/users/userServices";
 import AlertMessage from "../../Alert/AlertMessage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginAction } from "../../redux/slice/authSlice";
 
 //Validations
@@ -19,6 +19,9 @@ const validationSchema = Yup.object({
 });
 
 const LoginForm = () => {
+  //Navigate
+  const navigate = useNavigate();
+
   //Dispatch
   const dispatch = useDispatch();
 
@@ -55,6 +58,16 @@ const LoginForm = () => {
     },
   });
   //   console.log({isPending, isError, error, isSuccess});
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isSuccess) {
+        navigate("/profile");
+      }
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [isSuccess, navigate]);
 
   return (
     <form

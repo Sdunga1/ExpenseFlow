@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoLogOutOutline } from "react-icons/io5";
 
 import { SiAuthy } from "react-icons/si";
@@ -13,6 +13,8 @@ function classNames(...classes) {
 }
 
 export default function PrivateNavbar() {
+  const navigate = useNavigate();
+
   //Dispatch
   const dispatch = useDispatch();
 
@@ -21,6 +23,7 @@ export default function PrivateNavbar() {
     dispatch(logoutAction());
     //Remove the user from the storage
     localStorage.removeItem("userInfo");
+    navigate("login");
   };
 
   return (
