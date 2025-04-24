@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { FaUser, FaEnvelope, FaLock, FaEyeSlash, FaEye } from "react-icons/fa";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation } from "@tanstack/react-query";
@@ -19,6 +19,9 @@ const validationSchema = Yup.object({
 });
 
 const RegisterForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   // Navigate
   const navigate = useNavigate();
 
@@ -63,7 +66,7 @@ const RegisterForm = () => {
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="max-w-md mx-auto my-10 bg-yellow-50 p-6 rounded-xl shadow-lg space-y-6 border border-gray-300"
+      className="max-w-md mx-auto my-10 bg-emerald-50 p-6 rounded-xl shadow-lg space-y-6 border border-gray-300"
     >
       <h2 className="text-3xl font-semibold text-center text-gray-800">
         Register
@@ -108,24 +111,43 @@ const RegisterForm = () => {
         <FaLock className="absolute top-3 left-3 text-gray-400" />
         <input
           id="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           {...formik.getFieldProps("password")}
-          className="pl-10 pr-4 py-2 w-full rounded-md border border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+          className="pl-10 pr-10 py-2 w-full rounded-md border border-gray-300 focus:border-blue-500 focus:ring-blue-500"
         />
+        {/* toggle button */}
+        <button
+          type="button"
+          onClick={() => setShowPassword((s) => !s)}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </button>
+
         {formik.touched.password && formik.errors.password && (
           <span className="text-xs text-red-500">{formik.errors.password}</span>
         )}
       </div>
+
+      {/* --- CONFIRM PASSWORD FIELD WITH ITS OWN TOGGLE --- */}
       <div className="relative">
         <FaLock className="absolute top-3 left-3 text-gray-400" />
         <input
           id="confirmpassword"
-          type="password"
+          type={showConfirm ? "text" : "password"}
           placeholder="Confirm Password"
           {...formik.getFieldProps("confirmpassword")}
-          className="pl-10 pr-4 py-2 w-full rounded-md border border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+          className="pl-10 pr-10 py-2 w-full rounded-md border border-gray-300 focus:border-blue-500 focus:ring-blue-500"
         />
+        <button
+          type="button"
+          onClick={() => setShowConfirm((s) => !s)}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+        >
+          {showConfirm ? <FaEyeSlash /> : <FaEye />}
+        </button>
+
         {formik.touched.confirmpassword && formik.errors.confirmpassword && (
           <span className="text-xs text-red-500">
             {formik.errors.confirmpassword}
