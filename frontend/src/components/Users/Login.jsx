@@ -19,14 +19,14 @@ const validationSchema = Yup.object({
 });
 
 const LoginForm = () => {
+  //Show or hide password
+  const [showPassword, setShowPassword] = useState(false);
+
   //Navigate
   const navigate = useNavigate();
 
   //Dispatch
   const dispatch = useDispatch();
-
-  //Show or hide password
-  const [showPassword, setShowPassword] = useState(false);
 
   //Mutation
   const { mutateAsync, isPending, isError, error, isSuccess } = useMutation({

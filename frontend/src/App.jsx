@@ -1,9 +1,12 @@
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LoginForm from "./components/Users/Login";
-import PrivateNavbar from "./components/Users/PrivateNavbar";
+import PrivateNavbar from "./components/Navbar/PrivateNavbar";
 import { useSelector } from "react-redux";
 import RegisterForm from "./components/Users/Register";
+import AddCategory from "./components/Category/AddCategory";
+import PublicNavbar from "./components/Navbar/PublicNavbar";
+import CategoriesList from "./components/Category/CategoriesList";
 
 function App() {
   //Get the token
@@ -12,11 +15,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      {user ? <PrivateNavbar /> : <></>}
+      {user ? <PrivateNavbar /> : <PublicNavbar />}
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />}></Route>
         <Route path="/login" element={<LoginForm />}></Route>
         <Route path="/register" element={<RegisterForm />}></Route>
+        <Route path="/add-category" element={<AddCategory />}></Route>
+        <Route path="/categories" element={<CategoriesList />}></Route>
       </Routes>
     </BrowserRouter>
   );
