@@ -1,23 +1,63 @@
 import React, { useEffect } from "react";
 import { FaTrash, FaEdit, FaChevronDown } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "react-router-dom";
-import { listCategoriesAPI } from "../../services/category/categoryServices";
+import {
+  deleteCategoryAPI,
+  listCategoriesAPI,
+} from "../../services/category/categoryServices";
 import AlertMessage from "../../Alert/AlertMessage";
 
 const CategoriesList = () => {
   const { state } = useLocation();
   const updatedId = state?.updatedId;
 
+  //fetching
   const {
     data = [],
     isError,
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["list-categories"],
     queryFn: listCategoriesAPI,
   });
+
+  //Delete
+  //Mutation
+  const {
+    mutateAsync,
+    error: deleteError,
+    isSuccess: deleteSuccess,
+    reset,
+  } = useMutation({
+    mutationFn: deleteCategoryAPI,
+    mutationKey: ["delete-category"],
+    onSuccess: () => refetch(),
+  });
+
+  //Delete handler
+  const handleDelete = (id) => {
+    mutateAsync(id)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => console.log(e));
+  };
+
+  //Automatically clear the alert message after 500 milliseconds
+  useEffect(() => {
+    let timer;
+    if (deleteSuccess || deleteError) {
+      timer = setTimeout(() => {
+        reset();
+      }, 500);
+    }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [deleteError, deleteSuccess, reset]);
 
   useEffect(() => {
     if (updatedId) {
@@ -35,6 +75,22 @@ const CategoriesList = () => {
       {isError && (
         <AlertMessage type="error" message={error.response.data.message} />
       )}
+
+      {deleteSuccess && (
+        <div className="relative">
+          <AlertMessage
+            type="success"
+            message="Category deleted successfully!"
+          />
+          <div className="progress-bar" />
+        </div>
+      )}
+      {deleteError && (
+        <AlertMessage
+          type="error"
+          message={deleteError.response?.data?.message || "Delete failed"}
+        />
+      )}
       <div className="relative">
         <ul
           className={`space-y-4 ${
@@ -44,7 +100,7 @@ const CategoriesList = () => {
           {data.map((category) => (
             <li
               key={category._id}
-              className={`flex justify-between items-center bg-gray-50 p-3 rounded-md ${
+              className={`flex justify-between items-center bg-gray-100 p-3 rounded-md ${
                 category._id === updatedId ? "bump" : ""
               }`}
             >
@@ -67,7 +123,10 @@ const CategoriesList = () => {
                     <FaEdit />
                   </button>
                 </Link>
-                <button className="text-red-500 hover:text-red-700">
+                <button
+                  onClick={() => handleDelete(category?._id)}
+                  className="text-red-500 hover:text-red-700"
+                >
                   <FaTrash />
                 </button>
               </div>

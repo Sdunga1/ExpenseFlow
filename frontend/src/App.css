@@ -24,3 +24,22 @@
 .bump {
   animation: bump 0.3s ease-out;
 }
+
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: currentColor;
+  width: 100%;
+  animation: shrink 0.5s linear forwards;
+}
