@@ -50,3 +50,14 @@ export const updateCategoryAPI = async ({ name, type, id }) => {
   //return a promise
   return response.data;
 };
+
+//Delete Category
+export const deleteCategoryAPI = async (id) => {
+  const response = await axios.delete(`${BASE_URL}/categories/delete/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  //Return the promise
+  return response.data;
+};
