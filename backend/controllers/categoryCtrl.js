@@ -15,7 +15,7 @@ const categoryController = {
     }
 
     //!Convert the name to lowercase
-    const normalizedName = name.toLowerCase();
+    const rawname = name.trim();
 
     //! Check if the type is valid
     const validTypes = ["income", "expense"];
@@ -25,9 +25,9 @@ const categoryController = {
 
     //! Check if the same category created by the user exists
     const categoryExists = await Category.findOne({
-      name: normalizedName,
+      name: rawname,
       user: req.user,
-    });
+    }).collation({ locale: "en", strength: 2 });
 
     if (categoryExists) {
       throw new Error(
@@ -37,7 +37,7 @@ const categoryController = {
 
     //! Create the category
     const newCategory = await Category.create({
-      name: normalizedName,
+      name: rawname,
       user: req.user,
       type,
     });
@@ -53,11 +53,22 @@ const categoryController = {
   //! Update
   update: asyncHandler(async (req, res) => {
     const { type, name } = req.body;
-    const normalizedName = name.toLowerCase();
     const category = await Category.findById(req.params.id);
-    if (!category && category.user.toString() !== req.user.toString()) {
+    if (!category || category.user.toString() !== req.user.toString()) {
       throw new Error("Category not found or user not authorized");
     }
+
+    if (name) {
+      const clash = await Category.findOne({
+        user: req.user,
+        name: name.trim(),
+        _id: { $ne: req.params.id },
+      }).collation({ locale: "en", strength: 2 });
+      if (clash) {
+        throw new Error(`Category "${clash.name}" already exists`);
+      }
+    }
+
     const oldName = category.name;
     //! Update category properties
     category.name = name || category.name;
