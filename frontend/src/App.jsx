@@ -7,6 +7,7 @@ import RegisterForm from "./components/Users/Register";
 import AddCategory from "./components/Category/AddCategory";
 import PublicNavbar from "./components/Navbar/PublicNavbar";
 import CategoriesList from "./components/Category/CategoriesList";
+import UpdateCategory from "./components/Category/UpdateCategory";
 
 function App() {
   //Get the token
@@ -17,11 +18,16 @@ function App() {
     <BrowserRouter>
       {user ? <PrivateNavbar /> : <PublicNavbar />}
       <Routes>
+        <Route
+          path="/"
+          element={<Navigate to={user ? "/profile" : "/login"} replace />}
+        ></Route>
         <Route path="/" element={<Navigate to="/login" replace />}></Route>
         <Route path="/login" element={<LoginForm />}></Route>
         <Route path="/register" element={<RegisterForm />}></Route>
         <Route path="/add-category" element={<AddCategory />}></Route>
         <Route path="/categories" element={<CategoriesList />}></Route>
+        <Route path="/update-category/:id" element={<UpdateCategory />}></Route>
       </Routes>
     </BrowserRouter>
   );

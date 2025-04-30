@@ -5,29 +5,36 @@ import { FaWallet } from "react-icons/fa";
 import { SiDatabricks } from "react-icons/si";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import AlertMessage from "../../Alert/AlertMessage";
-import { addCategoryAPI } from "../../services/category/categoryServices";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { updateCategoryAPI } from "../../services/category/categoryServices";
 
 const validationSchema = Yup.object({
-  name: Yup.string().required("Category name is required"),
-  type: Yup.string()
-    .required("Category type is required")
-    .oneOf(["income", "expense"]),
+  name: Yup.string(),
+  type: Yup.string().oneOf(["income", "expense"]),
 });
 
-const AddCategory = () => {
+const UpdateCategory = () => {
+  // Params
+  const { id } = useParams();
+  console.log(id);
+
+  // navigate
   const navigate = useNavigate();
+
+  //Getting the query client
   const queryClient = useQueryClient();
 
   //Mutation
   const { mutateAsync, isError, error, isSuccess } = useMutation({
-    mutationFn: addCategoryAPI,
-    mutationKey: ["add-category"],
-    onSuccess: (newCategory) => {
+    mutationFn: updateCategoryAPI,
+    mutationKey: ["update-category"],
+    onSuccess: () => {
+      //Refresh the cached list of react query
       queryClient.invalidateQueries(["list-categories"]);
+      //Now navigate to the /categories and send the updated id
       navigate("/categories", {
         replace: true,
-        state: { updatedId: newCategory._id },
+        state: { updatedId: id },
       });
     },
   });
@@ -39,7 +46,11 @@ const AddCategory = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      mutateAsync(values)
+      const data = {
+        ...values,
+        id,
+      };
+      mutateAsync(data)
         .then((data) => console.log(data))
         .catch((e) => console.log(e));
     },
@@ -52,7 +63,7 @@ const AddCategory = () => {
     >
       <div className="text-center">
         <h2 className="text-2xl font-semibold text-gray-800">
-          Add New Category
+          Update Category
         </h2>
         <p className="text-gray-600">Fill in the details below.</p>
       </div>
@@ -69,7 +80,7 @@ const AddCategory = () => {
       {isSuccess && (
         <AlertMessage
           type="success"
-          message="Category added successfully, redirecting..."
+          message="Category updated successfully, redirecting..."
         />
       )}
       {/* Category Type */}
@@ -122,10 +133,10 @@ const AddCategory = () => {
         type="submit"
         className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200 transform"
       >
-        Add Category
+        Update Category
       </button>
     </form>
   );
 };
 
-export default AddCategory;
+export default UpdateCategory;
