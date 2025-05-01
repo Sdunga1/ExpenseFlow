@@ -8,6 +8,7 @@ import AddCategory from "./components/Category/AddCategory";
 import PublicNavbar from "./components/Navbar/PublicNavbar";
 import CategoriesList from "./components/Category/CategoriesList";
 import UpdateCategory from "./components/Category/UpdateCategory";
+import TransactionForm from "./components/Transactions/TransactionForm";
 
 function App() {
   //Get the token
@@ -28,6 +29,7 @@ function App() {
         <Route path="/add-category" element={<AddCategory />}></Route>
         <Route path="/categories" element={<CategoriesList />}></Route>
         <Route path="/update-category/:id" element={<UpdateCategory />}></Route>
+        <Route path="/add-transaction" element={<TransactionForm />}></Route>
       </Routes>
     </BrowserRouter>
   );
