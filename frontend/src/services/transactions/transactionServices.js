@@ -29,3 +29,16 @@ export const addTransactionAPI = async ({
   //return a promise
   return response.data;
 };
+
+//List transactions
+export const listTransactionsAPI = async () => {
+  const token = getUserFromStorage();
+  const response = await axios.get(`${BASE_URL}/transactions/lists`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  //Return a promise
+  return response.data;
+};
