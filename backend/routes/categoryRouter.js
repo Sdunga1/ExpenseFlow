@@ -1,6 +1,6 @@
 const express = require("express");
 const isAuthenticated = require("../middlewares/isAuth");
-const categoryController = require("../controllers/CategoryCtrl");
+const categoryController = require("../controllers/categoryCtrl");
 const categoryRouter = express.Router();
 
 //! Add
