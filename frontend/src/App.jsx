@@ -10,6 +10,8 @@ import CategoriesList from "./components/Category/CategoriesList";
 import UpdateCategory from "./components/Category/UpdateCategory";
 import TransactionForm from "./components/Transactions/TransactionForm";
 import Dashboard from "./components/Users/Dashboard";
+import UserProfile from "./components/Users/UserProfile";
+import AuthRoute from "./components/Auth/AuthRoute";
 
 function App() {
   //Get the token
@@ -27,11 +29,54 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />}></Route>
         <Route path="/login" element={<LoginForm />}></Route>
         <Route path="/register" element={<RegisterForm />}></Route>
-        <Route path="/add-category" element={<AddCategory />}></Route>
-        <Route path="/categories" element={<CategoriesList />}></Route>
-        <Route path="/update-category/:id" element={<UpdateCategory />}></Route>
-        <Route path="/add-transaction" element={<TransactionForm />}></Route>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route
+          path="/add-category"
+          element={
+            <AuthRoute>
+              <AddCategory />
+            </AuthRoute>
+          }
+        ></Route>
+        <Route
+          path="/categories"
+          element={
+            <AuthRoute>
+              <CategoriesList />
+            </AuthRoute>
+          }
+        ></Route>
+        <Route
+          path="/update-category/:id"
+          element={
+            <AuthRoute>
+              <UpdateCategory />
+            </AuthRoute>
+          }
+        ></Route>
+        <Route
+          path="/add-transaction"
+          element={
+            <AuthRoute>
+              <TransactionForm />
+            </AuthRoute>
+          }
+        ></Route>
+        <Route
+          path="/dashboard"
+          element={
+            <AuthRoute>
+              <Dashboard />
+            </AuthRoute>
+          }
+        ></Route>
+        <Route
+          path="/profile"
+          element={
+            <AuthRoute>
+              <UserProfile />
+            </AuthRoute>
+          }
+        ></Route>
       </Routes>
     </BrowserRouter>
   );

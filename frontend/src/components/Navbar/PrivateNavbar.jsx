@@ -73,7 +73,7 @@ export default function PrivateNavbar() {
               </div>
               <button
                 onClick={logoutHandler}
-                className="ml-2 inline-flex items-center gap-x-1.5 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-600"
+                className="ml-2 inline-flex items-center gap-x-1.5 rounded-md bg-red-400 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-600"
               >
                 <IoLogOutOutline className="h-5 w-5" />
                 Logout
