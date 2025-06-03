@@ -31,9 +31,15 @@ export const addTransactionAPI = async ({
 };
 
 //List transactions
-export const listTransactionsAPI = async () => {
+export const listTransactionsAPI = async ({
+  category,
+  startDate,
+  endDate,
+  type,
+}) => {
   const token = getUserFromStorage();
   const response = await axios.get(`${BASE_URL}/transactions/lists`, {
+    params: { category, startDate, endDate, type },
     headers: {
       Authorization: `Bearer ${token}`,
     },

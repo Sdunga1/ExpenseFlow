@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaTrash, FaEdit } from "react-icons/fa";
 
@@ -7,10 +7,25 @@ import { listTransactionsAPI } from "../../services/transactions/transactionServ
 import { listCategoriesAPI } from "../../services/category/categoryServices";
 
 const TransactionList = () => {
+  //Filtering State
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    type: "",
+    category: "",
+  });
+
+  //!Handle filter change
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+  console.log(filters);
+
   //fetching transactions
   const { data: transactions } = useQuery({
-    queryKey: ["list-transactions"],
-    queryFn: listTransactionsAPI,
+    queryKey: ["list-transactions", filters],
+    queryFn: () => listTransactionsAPI(filters),
   });
 
   //fetching categories
@@ -26,18 +41,24 @@ const TransactionList = () => {
         <input
           type="date"
           name="startDate"
+          value={filters.startDate}
+          onChange={handleFilterChange}
           className="p-2 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
         />
         {/* End Date */}
         <input
           type="date"
           name="endDate"
+          value={filters.endDate}
+          onChange={handleFilterChange}
           className="p-2 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
         />
         {/* Type */}
         <div className="relative">
           <select
             name="type"
+            value={filters.type}
+            onChange={handleFilterChange}
             className="w-full p-2 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 appearance-none"
           >
             <option value="">All Types</option>
@@ -50,8 +71,12 @@ const TransactionList = () => {
         <div className="relative">
           <select
             name="category"
+            value={filters.category}
+            onChange={handleFilterChange}
             className="w-full p-2 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 appearance-none"
           >
+            <option value="All">All Categories</option>
+            <option value="Uncategorized">Uncategorized</option>
             {categoriesData?.map((category) => {
               return (
                 <option key={category?._id} value={category?.name}>
@@ -65,7 +90,7 @@ const TransactionList = () => {
       </div>
       <div className="my-4 p-4 shadow-lg rounded-lg bg-white">
         {/* Inputs and selects for filtering (unchanged) */}
-        <div className="mt-6 bg-gray-50 p-4 rounded-lg shadow-inner">
+        <div className="mt-6 bg-gray-100 p-4 rounded-lg shadow-inner">
           <h3 className="text-xl font-semibold mb-4 text-gray-800">
             Filtered Transactions
           </h3>

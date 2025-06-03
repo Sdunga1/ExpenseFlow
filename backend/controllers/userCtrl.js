@@ -105,7 +105,10 @@ const usersController = {
 
     user.password = hashedPassword;
     //! Resave the user with updated password
-    await user.save();
+    await user.save({
+      validateBeforeSave: false,
+    });
+
     res.json({
       message: "Password changed Successfully",
     });
