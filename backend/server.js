@@ -16,7 +16,6 @@ mongoose
 
 //!Middlewares
 app.use(express.json()); //? Parse incoming Json data
-const cors = require("cors");
 
 const corsOptions = {
   origin: "https://expense-flow-fd.vercel.app",
