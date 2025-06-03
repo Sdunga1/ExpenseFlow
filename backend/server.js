@@ -16,7 +16,18 @@ mongoose
 
 //!Middlewares
 app.use(express.json()); //? Parse incoming Json data
-app.use(cors());
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "https://expense-flow-fd.vercel.app",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+app.get("/", (req, res) => {
+  res.send("ExpenseFlow API is running");
+});
 
 //!Route
 app.use("/", userRouter);
@@ -26,4 +37,6 @@ app.use(errorHandler);
 
 //!Start the server
 const PORT = process.env.PORT || 8002;
-app.listen(PORT, '0.0.0.0', () => console.log(`Server is running... on ${PORT}`));
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`Server is running... on ${PORT}`)
+);
